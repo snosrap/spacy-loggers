@@ -3,6 +3,7 @@ A logger that logs training activity to MLflow.
 """
 
 from typing import Dict, Any, Tuple, Callable, List, Optional, IO
+from pathlib import Path
 import sys
 
 from spacy import util
@@ -69,7 +70,7 @@ def mlflow_logger_v1(
                     mlflow.log_metrics(util.dict_to_dot(other_scores))
                 if output_path:
                     nlp = load(output_path)
-                    mlflow.spacy.log_model(nlp, f"{output_path.split('/')[-1]}-{info['epoch']}")
+                    mlflow.spacy.log_model(nlp, Path(output_path).name)
 
         def finalize() -> None:
             console_finalize()
