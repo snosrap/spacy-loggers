@@ -52,8 +52,8 @@ def mlflow_logger_v1(
                 score = info["score"]
                 other_scores = info["other_scores"]
                 losses = info["losses"]
-                # if score is not None:
-                #     mlflow.log_metric("score", score)
+                if score is not None:
+                    mlflow.log_metric("score", score)
                 if losses:
                     mlflow.log_metrics({f"loss_{k}": v for k, v in losses.items()})
                 if isinstance(other_scores, dict):
