@@ -3,7 +3,6 @@ A logger that logs training activity to MLflow.
 """
 
 from typing import Dict, Any, Tuple, Callable, List, Optional, IO
-from pathlib import Path
 import sys
 
 from spacy import util
@@ -67,9 +66,9 @@ def mlflow_logger_v1(
                     mlflow.log_metrics({f"loss_{k}": v for k, v in losses.items()})
                 if isinstance(other_scores, dict):
                     mlflow.log_metrics(util.dict_to_dot(other_scores))
-                if output_path:
+                if output_path and score == max(info["checkpoints"])[0]:
                     nlp = load(output_path)
-                    mlflow.spacy.log_model(nlp, Path(output_path).name)
+                    mlflow.spacy.log_model(nlp, "best")
 
         def finalize() -> None:
             console_finalize()
