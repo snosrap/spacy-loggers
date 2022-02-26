@@ -57,7 +57,12 @@ def mlflow_logger_v1(
                 if losses:
                     mlflow.log_metrics({f"loss_{k}": v for k, v in losses.items()})
                 if isinstance(other_scores, dict):
-                    mlflow.log_metrics({k:v for k,v in other_scores.items() if isinstance(v, float)})
+                    mlflow.log_metrics({k: v for k, v in other_scores.items() if isinstance(v, float)})
+                    mlflow.log_metrics({
+                        f"{k}_{kk}": vv
+                        for k, v in other_scores["ents_per_type"].items()
+                        for kk, vv in v.items()
+                    })
 
         def finalize() -> None:
             console_finalize()
