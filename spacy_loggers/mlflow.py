@@ -7,6 +7,7 @@ import sys
 
 from spacy import util
 from spacy import Language
+from spacy import load
 from spacy.training.loggers import console_logger
 
 
@@ -59,12 +60,16 @@ def mlflow_logger_v1(
                 score = info["score"]
                 other_scores = info["other_scores"]
                 losses = info["losses"]
+                output_path = info.get("output_path", None)
                 if score is not None:
                     mlflow.log_metric("score", score)
                 if losses:
                     mlflow.log_metrics({f"loss_{k}": v for k, v in losses.items()})
                 if isinstance(other_scores, dict):
                     mlflow.log_metrics(util.dict_to_dot(other_scores))
+                if output_path:
+                    nlp = spacy.load(output_path)
+                    mlflow.spacy.log_model(nlp, f"{output_path.split('/')[-1]}-{info['epoch']}")
 
         def finalize() -> None:
             console_finalize()
