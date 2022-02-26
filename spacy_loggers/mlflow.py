@@ -44,7 +44,12 @@ def mlflow_logger_v1(
         mlflow.start_run(
             run_id=run_id, experiment_id=experiment_id, run_name=run_name, nested=nested, tags=tags
         )
-        mlflow.log_params({k.replace("@", ""):v for k,v in list(config_dot.items())[:100]})
+
+        config_dot_items = list(config_dot.items())
+        config_dot_batches = [config_dot_items[i:i+100] for i in range(0, len(config_dot_items), 100)]
+        for batch in config_dot_batches:
+            mlflow.log_params({k.replace("@", ""):v for k,v in batch})
+
         console_log_step, console_finalize = console(nlp, stdout, stderr)
 
         def log_step(info: Optional[Dict[str, Any]]):
