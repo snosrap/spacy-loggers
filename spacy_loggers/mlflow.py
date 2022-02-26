@@ -44,7 +44,7 @@ def mlflow_logger_v1(
         mlflow.start_run(
             run_id=run_id, experiment_id=experiment_id, run_name=run_name, nested=nested, tags=tags
         )
-        mlflow.log_params(config)
+        mlflow.log_params(config_dot)
         console_log_step, console_finalize = console(nlp, stdout, stderr)
 
         def log_step(info: Optional[Dict[str, Any]]):
