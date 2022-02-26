@@ -57,7 +57,6 @@ def mlflow_logger_v1(
         def log_step(info: Optional[Dict[str, Any]]):
             console_log_step(info)
             if info is not None:
-                print(info)
                 score = info["score"]
                 other_scores = info["other_scores"]
                 losses = info["losses"]
