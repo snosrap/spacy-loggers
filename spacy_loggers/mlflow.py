@@ -68,7 +68,7 @@ def mlflow_logger_v1(
                 if isinstance(other_scores, dict):
                     mlflow.log_metrics(util.dict_to_dot(other_scores))
                 if output_path:
-                    nlp = spacy.load(output_path)
+                    nlp = load(output_path)
                     mlflow.spacy.log_model(nlp, f"{output_path.split('/')[-1]}-{info['epoch']}")
 
         def finalize() -> None:
