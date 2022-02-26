@@ -53,6 +53,7 @@ def mlflow_logger_v1(
         console_log_step, console_finalize = console(nlp, stdout, stderr)
 
         def log_step(info: Optional[Dict[str, Any]]):
+            print(info)
             console_log_step(info)
             if info is not None:
                 score = info["score"]
