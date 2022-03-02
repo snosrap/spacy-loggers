@@ -21,6 +21,7 @@ def mlflow_logger_v1(
     nested: bool = False,
     tags: Optional[Dict[str, Any]] = None,
     remove_config_values: List[str] = [],
+    output_path: Optional[str] = None,
 ):
     try:
         import mlflow
@@ -61,8 +62,6 @@ def mlflow_logger_v1(
 
         console_log_step, console_finalize = console(nlp, stdout, stderr)
 
-        output_path_last = None
-
         def log_step(info: Optional[Dict[str, Any]]):
             console_log_step(info)
             if info is not None:
@@ -76,13 +75,11 @@ def mlflow_logger_v1(
                     mlflow.log_metrics({f"loss_{k}": v for k, v in losses.items()})
                 if isinstance(other_scores, dict):
                     mlflow.log_metrics(util.dict_to_dot(other_scores))
-                if output_path:
-                    output_path_last = output_path
 
         def finalize() -> None:
             console_finalize()
-            if output_path_last:
-                output_path_best = Path(output_path_last).parent / DIR_MODEL_BEST
+            if output_path:
+                output_path_best = Path(output_path) / DIR_MODEL_BEST
                 nlp = load(output_path_best)
                 mlflow.spacy.log_model(nlp, DIR_MODEL_BEST)
             mlflow.end_run()
